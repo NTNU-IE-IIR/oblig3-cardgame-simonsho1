@@ -1,4 +1,4 @@
-#Oblig 3 - Card Game
+# Oblig 3 - Card Game
 Bruk dette prosjektet som utgangspunkt for Oblig 3 i IDATA2001.
 
 I Oppgave 1, der du får oppgitt koden til klassen PlayingCard, gjør som følger:
