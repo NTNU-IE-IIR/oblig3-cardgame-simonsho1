@@ -19,11 +19,22 @@ public class PlayingCard {
    * 12 represents the queen and 13 represents the king. The Ace is represented by the
    * number 1.
    *
+   * <p>If the suit or face are invalid, an {@code IllegalArgumentException} is thrown.</p>
+   *
    * @param suit The suit of the card, as a single character. 'S' for Spades,
    *             'H' for Heart, 'D' for Diamonds and 'C' for clubs
    * @param face The face value of the card, an integer between 1 and 13
+   * @throws IllegalArgumentException if suit or face have invalid values.
    */
   public PlayingCard(char suit, int face) {
+    if (suit != 'H' && suit != 'D' && suit != 'C' && suit != 'S') {
+      throw new IllegalArgumentException("Parameter suit must be one of H, D, C or S");
+    }
+
+    if (face < 1 || face > 13) {
+      throw new IllegalArgumentException("Parameter face must be a number between 1 to 13");
+    }
+
     this.suit = suit;
     this.face = face;
   }
@@ -39,7 +50,8 @@ public class PlayingCard {
   }
 
   /**
-   * Returns the suit of the card, 'S' for Spades, 'H' for Heart, 'D' for Diamonds and 'C' for clubs
+   * Returns the suit of the card, 'S' for Spades, 'H' for Heart,
+   * 'D' for Diamonds and 'C' for clubs.
    *
    * @return the suit of the card
    */
@@ -54,5 +66,25 @@ public class PlayingCard {
    */
   public int getFace() {
     return face;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PlayingCard otherCard = (PlayingCard) o;
+    return getSuit() == otherCard.getSuit() && getFace() == otherCard.getFace();
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + getSuit();
+    hash = 31 * hash + getFace();
+    return hash;
   }
 }
