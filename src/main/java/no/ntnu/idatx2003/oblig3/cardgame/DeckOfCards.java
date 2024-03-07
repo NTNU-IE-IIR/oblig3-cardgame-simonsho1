@@ -1,6 +1,9 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Random;
 
 public class DeckOfCards {
   private final char[] suits = {'S', 'H', 'D', 'C'};
@@ -30,6 +33,15 @@ public class DeckOfCards {
 
     // Returns the card as a string
     return rankString + suit;
+  }
+
+  public ArrayList<String> dealHand(int n) {
+    // Draws random n cards from the deck
+    Random random = new Random();
+    Collections.shuffle(cards);
+    ArrayList<String> hand = new ArrayList<>(cards.subList(0, n));
+    cards.removeAll(hand);
+    return hand;
   }
 
 }
