@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class DeckOfCards {
   private final char[] suits = {'S', 'H', 'D', 'C'};
-  private ArrayList<String> cards;
+  private static ArrayList<String> cards;
 
   public DeckOfCards() {
     this.cards = new ArrayList<>();
@@ -35,7 +35,7 @@ public class DeckOfCards {
     return rankString + suit;
   }
 
-  public ArrayList<String> dealHand(int n) {
+  public static ArrayList<String> dealHand(int n) {
     // Draws random n cards from the deck
     Random random = new Random();
     Collections.shuffle(cards);
@@ -43,5 +43,10 @@ public class DeckOfCards {
     cards.removeAll(hand);
     return hand;
   }
+//  public static void main(String[] args) {
+//    DeckOfCards deck = new DeckOfCards();
+//    ArrayList<String> hand = deck.dealHand(5);
+//    System.out.println("Hand: " + hand);
+//  }
 
 }
