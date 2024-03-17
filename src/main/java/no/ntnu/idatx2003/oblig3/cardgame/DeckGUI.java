@@ -1,7 +1,6 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,7 +24,7 @@ public class DeckGUI extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    this.deckOfCards = new DeckOfCards();
+    deckOfCards = new DeckOfCards();
 
     BorderPane root = new BorderPane();
     FlowPane centerPane = createCenterPane();
@@ -61,7 +60,11 @@ public class DeckGUI extends Application {
     Button checkHandButton = new Button("Check hand");
     checkHandButton.setOnAction(actionEvent -> {
       deckOfCards.checkHand();
-      addInfoText("Hand checked");
+      // Update the text fields
+        sumTextField.setText(Integer.toString(deckOfCards.getSum()));
+        cardsOfHeartsTextField.setText(Integer.toString(deckOfCards.getNumberOfHearts()));
+        queenOfSpadesTextField.setText(deckOfCards.hasQueenOfSpades() ? "Yes" : "No");
+        flushTextField.setText(deckOfCards.hasFlush() ? "Yes" : "No");
     });
     rightContainer.getChildren().addAll(dealButton, checkHandButton);
     return rightContainer;
@@ -69,30 +72,30 @@ public class DeckGUI extends Application {
 
   private GridPane createBottomPane() {
     GridPane bottomContainer = new GridPane();
-    bottomContainer.setAlignment(Pos.CENTER);
+//    bottomContainer.setAlignment(Pos.CENTER);
 //    bottomContainer.setPadding(new Insets(10));
     bottomContainer.setHgap(10);
     bottomContainer.setVgap(10);
 
     sumTextField = new TextField();
     sumTextField.setEditable(false);
-    bottomContainer.add(new Text("Sum of the Cards: "), 0, 0);
-    bottomContainer.add(sumTextField, 1, 0);
+    bottomContainer.add(new Text("Sum of the Cards: "), 1, 0);
+    bottomContainer.add(sumTextField, 2, 0);
 
     cardsOfHeartsTextField = new TextField();
     cardsOfHeartsTextField.setEditable(false);
-    bottomContainer.add(new Text("Cards of Hearts: "), 0, 1);
-    bottomContainer.add(cardsOfHeartsTextField, 1, 1);
+    bottomContainer.add(new Text("Cards of Hearts: "), 1, 1);
+    bottomContainer.add(cardsOfHeartsTextField, 2, 1);
 
     queenOfSpadesTextField = new TextField();
     queenOfSpadesTextField.setEditable(false);
-    bottomContainer.add(new Text("Queen of Spades: "), 0, 2);
-    bottomContainer.add(queenOfSpadesTextField, 1, 2);
+    bottomContainer.add(new Text("Queen of Spades: "), 3, 0);
+    bottomContainer.add(queenOfSpadesTextField, 4, 0);
 
     flushTextField = new TextField();
     flushTextField.setEditable(false);
-    bottomContainer.add(new Text("Flush: "), 0, 3);
-    bottomContainer.add(flushTextField, 1, 3);
+    bottomContainer.add(new Text("Flush: "), 3, 1);
+    bottomContainer.add(flushTextField, 4, 1);
 
     return bottomContainer;
 
