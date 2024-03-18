@@ -1,10 +1,12 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DeckOfCards {
   private final char[] suits = {'S', 'H', 'D', 'C'};
   private static ArrayList<String> cards;
+
 
   public DeckOfCards() {
     this.cards = new ArrayList<>();
@@ -22,15 +24,15 @@ public class DeckOfCards {
     // Convert numbervalue to cardvalue
     String rankString =
         switch (rank) {
-          case 1 -> "A";
-          case 11 -> "J";
-          case 12 -> "Q";
-          case 13 -> "K";
+          case 1 -> "1";
+          case 11 -> "11";
+          case 12 -> "12";
+          case 13 -> "13";
           default -> Integer.toString(rank);
         };
 
     // Returns the card as a string
-    return rankString + suit;
+    return suit + rankString;
   }
 
   public void dealHand(int numberOfCards) {
@@ -49,44 +51,24 @@ public class DeckOfCards {
   }
 
   public void checkHand() {
-    // Checks the hand for Queen of Spades, Five cards of the same suit.
-    // and the sum of the cards, and the number of hearts.
     List<String> hand = DeckOfCards.getHand();
-    int sum = 0;
-    int heartsCount = 0;
-    boolean hasQueenOfSpades = false;
-    boolean hasFlush = false;
 
-    Map<Character, Integer> suitsCount = new HashMap<>();
+    int sum = hand.stream()
+        .mapToInt(card -> getValue(card.substring(0, card.length() - 1)))
+        .sum();
 
-    for (String card : hand) {
-      char suit = card.charAt(card.length() - 1);
-      int value = getValue(card.substring(0, card.length() - 1));
+    String heartsCards = hand.stream()
+        .filter(card -> card.startsWith("H"))
+        .collect(Collectors.joining(", "));
 
-      // Checks if the card is the Queen of Spades
-      if (suit == 'S' && card.startsWith("Q")) {
-        hasQueenOfSpades = true;
-      }
+    boolean hasQueenOfSpades = hand.stream()
+        .anyMatch(card -> card.equals("SQ"));
 
-      // Update sum
-      sum += value;
-
-      // Check for hearts
-      if (suit == 'H') {
-        heartsCount++;
-      }
-
-      // Update suits count
-      suitsCount.put(suit, suitsCount.getOrDefault(suit, 0) + 1);
-    }
-
-// Check for flush
-    for (int count : suitsCount.values()) {
-      if (count == 5) {
-        hasFlush = true;
-        break;
-      }
-    }
+    boolean hasFlush = hand.stream()
+        .collect(Collectors.groupingBy(card -> card.charAt(card.length() - 1), Collectors.counting()))
+        .values()
+        .stream()
+        .anyMatch(count -> count == 5);
 
     String result =
         "Flush: "
@@ -96,7 +78,7 @@ public class DeckOfCards {
             + "\nSum: "
             + sum
             + "\nHearts Count: "
-            + heartsCount;
+            + heartsCards;
     System.out.println(result);
   }
 
@@ -110,46 +92,54 @@ public int getSum() {
     return sum;
   }
 
-    public int getNumberOfHearts() {
-        List<String> hand = DeckOfCards.getHand();
-        int heartsCount = 0;
-        for (String card : hand) {
-        if (card.charAt(card.length() - 1) == 'H') {
-            heartsCount++;
-        }
-        }
-        return heartsCount;
+  public String getCardsOfHearts() {
+    List<String> hand = DeckOfCards.getHand();
+    List<String> heartsCards = new ArrayList<>();
+    for (String cards : hand) {
+      if (cards.startsWith("H")) {
+        heartsCards.add(cards);
+      }
+    }
+    if (heartsCards.isEmpty()) {
+      return "No hearts";
+    } else {
+      return String.join(", ", heartsCards);
+    }
+  }
+
+
+    public String hasQueenOfSpades() {
+    List<String> hand = DeckOfCards.getHand();
+    for (String card : hand) {
+      if (card.equals("SQ")) {
+        return "Yes";
+      }
+    }
+    return "No";
     }
 
-    public boolean hasQueenOfSpades() {
-        List<String> hand = DeckOfCards.getHand();
-        for (String card : hand) {
-        if (card.equals("SQ")) {
-            return true;
-        }
-        }
-        return false;
+  public String hasFlush() {
+    Map<Character, Integer> suitCount = new HashMap<>();
+    List<String> hand = DeckOfCards.getHand();
+    for (String card : hand) {
+      char suit = card.charAt(card.length() - 1);
+      suitCount.put(suit, suitCount.getOrDefault(suit, 0) + 1);
     }
-
-    public boolean hasFlush() {
-        Map<Character, Integer> suitsCount = new HashMap<>();
-        List<String> hand = DeckOfCards.getHand();
-        for (String card : hand) {
-        char suit = card.charAt(card.length() - 1);
-        suitsCount.put(suit, suitsCount.getOrDefault(suit, 0) + 1);
-        }
-        for (int count : suitsCount.values()) {
-        if (count == 5) {
-            return true;
-        }
-        }
-        return false;
+    for (int count : suitCount.values()) {
+      if (count == 5) {
+        return "Yes";
+      }
     }
+    return "No";
+  }
 
 
   private int getValue(String rank) {
     // Converts the cardvalue to a numbervalue
     switch (rank) {
+      case "1" -> {
+        return 1;
+      }
       case "2" -> {
         return 2;
       }
@@ -177,17 +167,14 @@ public int getSum() {
       case "10" -> {
         return 10;
       }
-      case "J" -> {
+      case "11" -> {
         return 11;
       }
-      case "Q" -> {
+      case "12" -> {
         return 12;
       }
-      case "K" -> {
+      case "13" -> {
         return 13;
-      }
-      case "A" -> {
-        return 1;
       }
       default -> {
         return 0;
