@@ -17,7 +17,14 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
+/**
+ * A GUI for the DeckOfCards class.
+ *
+ * <p>The GUI has a button to deal a hand of cards, and a button to check the hand. The GUI also
+ * displays the hand of cards, and the result of the check.</p>
+ * <p>The GUI is created using JavaFX.</p>
+ *
+ */
 public class DeckGUI extends Application {
   private TextField sumTextField;
   private TextField cardsOfHeartsTextField;
@@ -25,24 +32,35 @@ public class DeckGUI extends Application {
   private TextField queenOfSpadesTextField;
   private HBox infoBox;
 
-
+  /**
+   * The main method for the DeckGUI class.
+   *
+   * @param primaryStage The primary stage for the GUI.
+   */
   @Override
   public void start(Stage primaryStage) {
-    BorderPane rootNode = createGUI();
+    BorderPane root = createGUI();
 
-    Scene scene = new Scene(rootNode, 640, 480);
+    Scene scene = new Scene(root, 640, 480);
     primaryStage.setTitle("Deck of Cards");
     primaryStage.setScene(scene);
     primaryStage.show();
   }
 
+  /**
+   * Creates the main GUI for the DeckGUI class.
+   *
+   *
+   * @return The main GUI for the DeckGUI class.
+   */
   private BorderPane createGUI() {
     BorderPane rootNode = new BorderPane();
 
-
+    // Center pane
     FlowPane centerPane = new FlowPane();
     centerPane.setAlignment(Pos.CENTER);
-    centerPane.setPrefWidth(300);
+    centerPane.setPadding(new Insets(10));
+    centerPane.setPrefWidth(100);
     VBox infoBox = new VBox(10);
     centerPane.getChildren().add(infoBox);
 
@@ -55,21 +73,32 @@ public class DeckGUI extends Application {
     rootNode.setCenter(centerPane);
     rootNode.setRight(rightPane);
     rootNode.setBottom(bottomPane);
-    rootNode.setTop(centerContainer);
+    rootNode.setCenter(centerContainer);
 
     return rootNode;
   }
 
+  /**
+   * Creates the container for center alignment of card images
+   *
+   * @return the container for center alignment of card images
+   */
   private HBox createCenterContainer() {
     HBox centerContainer = new HBox();
     centerContainer.setAlignment(Pos.CENTER);
-    centerContainer.setPrefWidth(300);
     infoBox = new HBox(10);
     infoBox.setAlignment(Pos.CENTER);
+    infoBox.setPadding(new Insets(100, 0, 100, 0));
     centerContainer.getChildren().add(infoBox);
     return centerContainer;
   }
 
+  /**
+   * Creates an ImageView for a card image.
+   *
+   * @param cardName The name of the card image.
+   * @return The ImageView for the card image.
+   */
   private ImageView createCardImageView(String cardName) {
     String imagePath = "/cards/" + cardName;
     Image cardImage = new Image(getClass().getResourceAsStream(imagePath));
@@ -79,6 +108,12 @@ public class DeckGUI extends Application {
     imageView.setPreserveRatio(true);
     return imageView;
   }
+
+  /**
+   * Creates the right pane with buttons for dealing and checking the hand.
+   *
+   * @return VBox with buttons for dealing and checking the hand.
+   */
 
   private VBox createRightPane() {
     DeckOfCards deckOfCards = new DeckOfCards();
@@ -109,6 +144,12 @@ public class DeckGUI extends Application {
     rightContainer.getChildren().addAll(dealButton, checkButton);
     return rightContainer;
   }
+
+  /**
+   * Creates the bottom pane with text fields for displaying the result of the check.
+   *
+   * @return GridPane with text fields for displaying the result of the check.
+   */
 
   private GridPane createBottomPane() {
     GridPane bottomContainer = new GridPane();
@@ -143,5 +184,15 @@ public class DeckGUI extends Application {
     bottomContainer.add(queenOfSpadesTextField, 4, 1);
 
     return bottomContainer;
+  }
+
+  /**
+   * Launch the GUI.
+   *
+   * @param args Command-line arguments supplied during startup
+   */
+  public static void appMain(String[] args)
+  {
+    launch(args);
   }
 }
